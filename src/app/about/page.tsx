@@ -1,6 +1,22 @@
 import Image from "next/image";
+import type { Metadata } from "next";
 
-export const metadata = { title: "About — Adzepa Essentials" };
+export const metadata: Metadata = {
+  title: "About — Adzepa Essentials",
+  openGraph: {
+    title: "About — Adzepa Essentials",
+    url: "/about",
+    type: "website",
+    images: [{
+      url: "/images/products/bomber-navy-pattern-lifestyle.webp",
+      alt: "Adzepa Essentials bomber jacket worn outdoors",
+    }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["/images/products/bomber-navy-pattern-lifestyle.webp"],
+  },
+};
 
 export default function AboutPage() {
   return (

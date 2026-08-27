@@ -2,8 +2,29 @@ import Link from "next/link";
 import Image from "next/image";
 import { getFeaturedProducts, getPromotedProducts } from "@/lib/products";
 import ProductCard from "@/components/ProductCard";
+import type { Metadata } from "next";
 
 export const revalidate = 60;
+
+export const metadata: Metadata = {
+  title: "Adzepa Essentials — African Wax Print Bombers & Fabric",
+  openGraph: {
+    title: "Adzepa Essentials",
+    description: "Statement bomber jackets and premium wax print fabric, cut from authentic African prints.",
+    url: "/",
+    type: "website",
+    images: [{
+      url: "/images/products/bomber-red-block-mannequin.webp",
+      width: 1122,
+      height: 1400,
+      alt: "Adzepa Essentials African wax print bomber jacket",
+    }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["/images/products/bomber-red-block-mannequin.webp"],
+  },
+};
 
 export default async function HomePage() {
   const [featured, promotions] = await Promise.all([getFeaturedProducts(), getPromotedProducts()]);

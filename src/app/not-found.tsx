@@ -1,5 +1,24 @@
 import Link from "next/link";
 
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Page Not Found | Adzepa Essentials",
+  openGraph: {
+    title: "Page Not Found | Adzepa Essentials",
+    url: "/404",
+    type: "website",
+    images: [{
+      url: "/images/products/bomber-red-block-mannequin.webp",
+      alt: "Adzepa Essentials African wax print bomber jacket",
+    }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["/images/products/bomber-red-block-mannequin.webp"],
+  },
+};
+
 export default function NotFound() {
   return (
     <div className="min-h-[60vh] flex flex-col items-center justify-center text-center px-4">

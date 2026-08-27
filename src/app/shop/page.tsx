@@ -1,8 +1,28 @@
 import Link from "next/link";
 import { getAllCategories, getProducts } from "@/lib/products";
 import ProductCard from "@/components/ProductCard";
+import type { Metadata } from "next";
 
 export const revalidate = 60;
+
+export const metadata: Metadata = {
+  title: "Shop | Adzepa Essentials",
+  description: "Shop African wax print bomber jackets and premium fabric from Adzepa Essentials.",
+  openGraph: {
+    title: "Shop | Adzepa Essentials",
+    description: "Shop African wax print bomber jackets and premium fabric from Adzepa Essentials.",
+    url: "/shop",
+    type: "website",
+    images: [{
+      url: "/images/products/bomber-mustard-geo-mannequin.webp",
+      alt: "African wax print bomber jackets",
+    }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["/images/products/bomber-mustard-geo-mannequin.webp"],
+  },
+};
 
 type SearchParams = Promise<{ category?: string; sort?: string }>;
 

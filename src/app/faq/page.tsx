@@ -1,4 +1,21 @@
-export const metadata = { title: "FAQ — Adzepa Essentials" };
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "FAQ — Adzepa Essentials",
+  openGraph: {
+    title: "FAQ — Adzepa Essentials",
+    url: "/faq",
+    type: "website",
+    images: [{
+      url: "/images/fabric/fabric-teal-tribal.webp",
+      alt: "Authentic African wax print fabric",
+    }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["/images/fabric/fabric-teal-tribal.webp"],
+  },
+};
 
 const FAQS = [
   {
