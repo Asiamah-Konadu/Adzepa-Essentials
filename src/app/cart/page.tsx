@@ -55,7 +55,7 @@ export default function CartPage() {
       const link = buildWhatsAppOrderLink(
         lines.map((l) => ({
           productName: l.productName,
-          image: l.image,
+          productSlug: l.productSlug,
           variantLabel: l.variantLabel,
           quantity: l.quantity,
           unitPriceMinor: l.unitPriceMinor,
