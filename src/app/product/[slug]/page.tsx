@@ -12,7 +12,12 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const product = await getProductBySlug(slug);
   if (!product) return {};
+
+  const siteUrl = process.env.SITE_URL || "https://adzepaessentials.com";
   const image = product.images[0]?.url;
+  const absoluteImage = image ? new URL(image, siteUrl).toString() : undefined;
+  const absoluteUrl = new URL(`/product/${product.slug}`, siteUrl).toString();
+
   return {
     title: `${product.name} | Adzepa Essentials`,
     description: product.description,
@@ -20,8 +25,12 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       title: product.name,
       description: product.description,
       type: "website",
-      url: `/product/${product.slug}`,
-      ...(image ? { images: [{ url: image, alt: product.name }] } : {}),
+      url: absoluteUrl,
+      ...(absoluteImage ? { images: [{ url: absoluteImage, alt: product.name }] } : {}),
+    },
+    twitter: {
+      card: "summary_large_image",
+      ...(absoluteImage ? { images: [absoluteImage] } : {}),
     },
   };
 }
@@ -65,7 +74,7 @@ export default async function ProductPage({
           {product.images.length > 1 && (
             <div className="grid grid-cols-4 gap-2 mt-2">
               {product.images.map((img) => (
-                <div key={img.id} className="relative aspect-square bg-sand/40 overflow-hidden">
+                <Link key={img.id} href={img.url} target="_blank" rel="noreferrer" className="block relative aspect-square bg-sand/40 overflow-hidden">
                   <Image
                     src={img.url}
                     alt={img.alt ?? product.name}
@@ -73,7 +82,7 @@ export default async function ProductPage({
                     sizes="120px"
                     className="object-cover"
                   />
-                </div>
+                </Link>
               ))}
             </div>
           )}
