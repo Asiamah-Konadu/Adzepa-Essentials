@@ -29,7 +29,11 @@ export function buildWhatsAppOrderLink(
     throw new Error("WhatsApp checkout is not configured. Set NEXT_PUBLIC_WHATSAPP_NUMBER.");
   }
 
-  const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || "https://adzepaessentials.com").replace(/\/$/, "");
+  const siteUrl = (
+    typeof window !== "undefined"
+      ? window.location.origin
+      : process.env.NEXT_PUBLIC_SITE_URL || "https://adzepa-essentials.vercel.app"
+  ).replace(/\/$/, "");
   const productUrl = (slug: string) => `${siteUrl}/product/${encodeURIComponent(slug)}`;
 
   const lines: string[] = [];
