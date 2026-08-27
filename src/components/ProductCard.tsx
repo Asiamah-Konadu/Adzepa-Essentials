@@ -63,6 +63,15 @@ export default function ProductCard({
           )}
         </div>
       </div>
+      <span
+        className={`mt-4 block w-full border px-4 py-3 text-center font-tag text-xs uppercase tracking-tag transition-colors ${
+          inverse
+            ? "border-paper bg-paper text-ink group-hover:bg-signal group-hover:border-signal group-hover:text-paper"
+            : "border-ink bg-ink text-paper group-hover:bg-signal group-hover:border-signal"
+        }`}
+      >
+        View product
+      </span>
     </Link>
   );
 }

@@ -29,12 +29,7 @@ export function buildWhatsAppOrderLink(
     throw new Error("WhatsApp checkout is not configured. Set NEXT_PUBLIC_WHATSAPP_NUMBER.");
   }
 
-  const siteUrl = (
-    typeof window !== "undefined"
-      ? window.location.origin
-      : process.env.NEXT_PUBLIC_SITE_URL || "https://adzepa-essentials.vercel.app"
-  ).replace(/\/$/, "");
-  const productUrl = (slug: string) => `${siteUrl}/product/${encodeURIComponent(slug)}`;
+  const previewUrl = "https://adzepa-essentials.vercel.app/images/fabric/fabric-teal-tribal.webp";
 
   const lines: string[] = [];
   lines.push("*ADZEPA ESSENTIALS*");
@@ -46,7 +41,7 @@ export function buildWhatsAppOrderLink(
     const variant = item.variantLabel ? ` (${item.variantLabel})` : "";
     const lineTotal = formatMoney(item.unitPriceMinor * item.quantity);
     lines.push(`${item.quantity} x *${item.productName}*${variant} — ${lineTotal}`);
-    lines.push(productUrl(item.productSlug));
+    lines.push(previewUrl);
   }
   const total = items.reduce((sum, i) => sum + i.unitPriceMinor * i.quantity, 0);
   lines.push("");
