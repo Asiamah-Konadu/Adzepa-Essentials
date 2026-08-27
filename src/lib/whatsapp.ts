@@ -2,7 +2,7 @@ import { formatMoney } from "./money";
 
 export type CheckoutItem = {
   productName: string;
-  productSlug: string;
+  image: string;
   variantLabel?: string | null;
   quantity: number;
   unitPriceMinor: number;
@@ -29,7 +29,7 @@ export function buildWhatsAppOrderLink(
     throw new Error("WhatsApp checkout is not configured. Set NEXT_PUBLIC_WHATSAPP_NUMBER.");
   }
 
-  const previewUrl = "https://adzepa-essentials.vercel.app/images/fabric/fabric-teal-tribal.webp";
+  const siteUrl = "https://adzepa-essentials.vercel.app";
 
   const lines: string[] = [];
   lines.push("*ADZEPA ESSENTIALS*");
@@ -41,7 +41,7 @@ export function buildWhatsAppOrderLink(
     const variant = item.variantLabel ? ` (${item.variantLabel})` : "";
     const lineTotal = formatMoney(item.unitPriceMinor * item.quantity);
     lines.push(`${item.quantity} x *${item.productName}*${variant} — ${lineTotal}`);
-    lines.push(previewUrl);
+    lines.push(new URL(item.image, siteUrl).toString());
   }
   const total = items.reduce((sum, i) => sum + i.unitPriceMinor * i.quantity, 0);
   lines.push("");
