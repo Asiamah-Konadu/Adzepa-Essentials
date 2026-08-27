@@ -28,8 +28,8 @@ export default function ProductCard({
   const onSale = compareAtMinor && compareAtMinor > priceMinor;
 
   return (
-    <div className="group block">
-      <Link href={imageUrl} target="_blank" rel="noreferrer" className="block">
+    <Link href={`/product/${slug}`} className="group block">
+      <div>
         <div className="relative aspect-[4/5] overflow-hidden bg-sand/40">
           <Image
             src={imageUrl}
@@ -44,8 +44,7 @@ export default function ProductCard({
             </span>
           )}
         </div>
-      </Link>
-
+      </div>
       <div className={`mt-3 flex items-start justify-between gap-2 ${inverse ? "text-paper" : ""}`}>
         <div>
           {(brandName || categoryName || isAd) && (
@@ -53,9 +52,7 @@ export default function ProductCard({
               {isAd && "Ad · "}{brandName && `${brandName} · `}{categoryName}
             </p>
           )}
-          <Link href={`/product/${slug}`} className="font-display font-bold text-sm leading-snug hover:text-signal">
-            {name}
-          </Link>
+          <h3 className="font-display font-bold text-sm leading-snug">{name}</h3>
         </div>
         <div className="text-right shrink-0">
           <p className="font-body font-semibold text-sm">{formatMoney(priceMinor)}</p>
@@ -66,6 +63,6 @@ export default function ProductCard({
           )}
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
