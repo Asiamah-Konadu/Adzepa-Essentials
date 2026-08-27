@@ -22,10 +22,13 @@ model Product {
   id             String          @id @default(cuid())
   name           String
   slug           String          @unique
+  brandName      String?
+  isAd           Boolean         @default(false)
   description    String
   fabric         String?
   priceMinor     Int // price in minor currency unit (e.g. pesewas), e.g. 45000 = GHS 450.00
   compareAtMinor Int?
+  promotionLabel String?
   featured       Boolean         @default(false)
   active         Boolean         @default(true)
   categoryId     String

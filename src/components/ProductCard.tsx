@@ -9,6 +9,9 @@ type ProductCardProps = {
   priceMinor: number;
   compareAtMinor?: number | null;
   categoryName?: string;
+  brandName?: string | null;
+  isAd?: boolean;
+  inverse?: boolean;
 };
 
 export default function ProductCard({
@@ -18,6 +21,9 @@ export default function ProductCard({
   priceMinor,
   compareAtMinor,
   categoryName,
+  brandName,
+  isAd = false,
+  inverse = false,
 }: ProductCardProps) {
   const onSale = compareAtMinor && compareAtMinor > priceMinor;
 
@@ -37,11 +43,11 @@ export default function ProductCard({
           </span>
         )}
       </div>
-      <div className="mt-3 flex items-start justify-between gap-2">
+      <div className={`mt-3 flex items-start justify-between gap-2 ${inverse ? "text-paper" : ""}`}>
         <div>
-          {categoryName && (
+          {(brandName || categoryName || isAd) && (
             <p className="font-tag text-[11px] uppercase tracking-tag text-muted mb-0.5">
-              {categoryName}
+              {isAd && "Ad · "}{brandName && `${brandName} · `}{categoryName}
             </p>
           )}
           <h3 className="font-display font-bold text-sm leading-snug">{name}</h3>

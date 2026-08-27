@@ -13,6 +13,21 @@ export async function getFeaturedProducts() {
   });
 }
 
+export async function getPromotedProducts() {
+  return prisma.product.findMany({
+    where: {
+      active: true,
+      OR: [
+        { promotionLabel: { not: null } },
+        { compareAtMinor: { not: null } },
+      ],
+    },
+    include: { images: { orderBy: { position: "asc" } }, category: true },
+    orderBy: { updatedAt: "desc" },
+    take: 4,
+  });
+}
+
 export async function getProducts(params: {
   categorySlug?: string;
   sort?: "newest" | "price-asc" | "price-desc";

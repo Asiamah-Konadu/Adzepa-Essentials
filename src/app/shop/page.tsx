@@ -71,6 +71,8 @@ export default async function ShopPage({
               priceMinor={p.priceMinor}
               compareAtMinor={p.compareAtMinor}
               categoryName={p.category.name}
+              brandName={p.brandName}
+              isAd={p.isAd}
             />
           ))}
         </div>

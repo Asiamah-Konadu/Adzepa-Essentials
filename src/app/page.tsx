@@ -1,12 +1,12 @@
 import Link from "next/link";
 import Image from "next/image";
-import { getFeaturedProducts } from "@/lib/products";
+import { getFeaturedProducts, getPromotedProducts } from "@/lib/products";
 import ProductCard from "@/components/ProductCard";
 
 export const revalidate = 60;
 
 export default async function HomePage() {
-  const featured = await getFeaturedProducts();
+  const [featured, promotions] = await Promise.all([getFeaturedProducts(), getPromotedProducts()]);
 
   return (
     <div>
@@ -126,8 +126,40 @@ export default async function HomePage() {
                 priceMinor={p.priceMinor}
                 compareAtMinor={p.compareAtMinor}
                 categoryName={p.category.name}
+                brandName={p.brandName}
+                isAd={p.isAd}
               />
             ))}
+          </div>
+        </section>
+      )}
+
+      {promotions.length > 0 && (
+        <section className="border-y border-ink/10 bg-signal text-paper">
+          <div className="mx-auto max-w-6xl px-4 sm:px-6 py-12">
+            <div className="flex items-end justify-between mb-6">
+              <div>
+                <p className="font-tag text-xs uppercase tracking-tag text-paper/70 mb-2">Limited offers</p>
+                <h2 className="font-display font-black uppercase text-2xl sm:text-3xl">On promotion</h2>
+              </div>
+              <Link href="/shop" className="font-tag text-xs uppercase tracking-tag underline">Shop offers</Link>
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              {promotions.map((p) => (
+                <ProductCard
+                  key={p.id}
+                  slug={p.slug}
+                  name={p.name}
+                  imageUrl={p.images[0]?.url ?? "/images/logo.svg"}
+                  priceMinor={p.priceMinor}
+                  compareAtMinor={p.compareAtMinor}
+                  categoryName={p.promotionLabel ?? "Promotion"}
+                  brandName={p.brandName}
+                  isAd={p.isAd}
+                  inverse
+                />
+              ))}
+            </div>
           </div>
         </section>
       )}

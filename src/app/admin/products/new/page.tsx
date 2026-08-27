@@ -11,10 +11,13 @@ export default async function NewProductPage() {
         categories={categories}
         initial={{
           name: "",
+          brandName: "",
+          isAd: false,
           description: "",
           fabric: "",
           price: "",
           compareAtPrice: "",
+          promotionLabel: "",
           categoryId: categories[0]?.id ?? "",
           featured: false,
           active: true,

@@ -22,8 +22,9 @@ export default function Header() {
         <div className="flex h-16 items-center justify-between">
           <Link href="/" className="flex items-center gap-2 shrink-0" aria-label="Adzepa Essentials home">
             <Image src="/images/logo.svg" alt="" width={32} height={32} className="h-8 w-8" priority />
-            <span className="font-display font-black text-lg tracking-tight uppercase">
-              Adzepa Essentials
+            <span className="font-display font-black uppercase leading-none tracking-tight">
+              <span className="block text-[15px]">Adzepa</span>
+              <span className="block text-[10px] tracking-[0.22em] text-signal mt-1">Essentials</span>
             </span>
           </Link>
 

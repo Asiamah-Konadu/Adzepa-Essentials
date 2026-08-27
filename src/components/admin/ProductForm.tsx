@@ -10,10 +10,13 @@ export type ProductFormVariant = { id?: string; label: string; stock: number };
 
 export type ProductFormValues = {
   name: string;
+  brandName: string;
+  isAd: boolean;
   description: string;
   fabric: string;
   price: string; // major units as a string for the input
   compareAtPrice: string;
+  promotionLabel: string;
   categoryId: string;
   featured: boolean;
   active: boolean;
@@ -78,10 +81,13 @@ export default function ProductForm({
 
     const payload = {
       name: values.name,
+      brandName: values.brandName,
+      isAd: values.isAd,
       description: values.description,
       fabric: values.fabric,
       priceMinor: toMinor(parseFloat(values.price || "0")),
       compareAtMinor: values.compareAtPrice ? toMinor(parseFloat(values.compareAtPrice)) : null,
+      promotionLabel: values.promotionLabel,
       categoryId: values.categoryId,
       featured: values.featured,
       active: values.active,
@@ -133,6 +139,15 @@ export default function ProductForm({
         />
       </Field>
 
+      <div className="grid grid-cols-2 gap-4">
+        <Field label="Brand / business (optional)">
+          <input value={values.brandName} onChange={(e) => update("brandName", e.target.value)} className="w-full border border-ink/20 px-3 py-2 text-sm focus:border-ink outline-none" />
+        </Field>
+        <Field label="Promotion label (optional)">
+          <input value={values.promotionLabel} onChange={(e) => update("promotionLabel", e.target.value)} placeholder="Save 20%" className="w-full border border-ink/20 px-3 py-2 text-sm focus:border-ink outline-none" />
+        </Field>
+      </div>
+
       <Field label="Fabric / material note (optional)">
         <input
           value={values.fabric}
@@ -182,6 +197,10 @@ export default function ProductForm({
       </Field>
 
       <div className="flex gap-6 mb-5">
+        <label className="flex items-center gap-2 text-sm">
+          <input type="checkbox" checked={values.isAd} onChange={(e) => update("isAd", e.target.checked)} />
+          Mark as ad
+        </label>
         <label className="flex items-center gap-2 text-sm">
           <input
             type="checkbox"

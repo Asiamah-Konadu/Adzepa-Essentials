@@ -4,8 +4,27 @@ import { notFound } from "next/navigation";
 import { getProductBySlug } from "@/lib/products";
 import { formatMoney } from "@/lib/money";
 import AddToCartForm from "@/components/AddToCartForm";
+import type { Metadata } from "next";
 
 export const revalidate = 60;
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const product = await getProductBySlug(slug);
+  if (!product) return {};
+  const image = product.images[0]?.url;
+  return {
+    title: `${product.name} | Adzepa Essentials`,
+    description: product.description,
+    openGraph: {
+      title: product.name,
+      description: product.description,
+      type: "website",
+      url: `/product/${product.slug}`,
+      ...(image ? { images: [{ url: image, alt: product.name }] } : {}),
+    },
+  };
+}
 
 export default async function ProductPage({
   params,
@@ -63,8 +82,9 @@ export default async function ProductPage({
         {/* Details */}
         <div>
           <p className="font-tag text-xs uppercase tracking-tag text-muted mb-2">
-            {product.category.name}
+            {product.brandName && `${product.brandName} · `}{product.category.name}
           </p>
+          {product.isAd && <span className="tag-badge text-signal mb-2">Ad</span>}
           <h1 className="font-display font-black uppercase text-3xl sm:text-4xl leading-tight">
             {product.name}
           </h1>
@@ -81,6 +101,8 @@ export default async function ProductPage({
           </div>
 
           <p className="mt-5 text-ink/70 leading-relaxed">{product.description}</p>
+
+          {product.promotionLabel && <p className="tag-badge mt-4 text-signal">{product.promotionLabel}</p>}
 
           {product.fabric && (
             <p className="tag-badge mt-4 text-teal">{product.fabric}</p>

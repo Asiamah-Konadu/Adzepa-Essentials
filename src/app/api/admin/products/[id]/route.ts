@@ -24,10 +24,13 @@ export async function PUT(
 
   const {
     name,
+    brandName,
+    isAd,
     description,
     fabric,
     priceMinor,
     compareAtMinor,
+    promotionLabel,
     featured,
     active,
     categoryId,
@@ -35,10 +38,13 @@ export async function PUT(
     variants,
   } = body as {
     name?: string;
+    brandName?: string;
+    isAd?: boolean;
     description?: string;
     fabric?: string;
     priceMinor?: number;
     compareAtMinor?: number | null;
+    promotionLabel?: string;
     featured?: boolean;
     active?: boolean;
     categoryId?: string;
@@ -58,10 +64,13 @@ export async function PUT(
       where: { id },
       data: {
         name: name.trim(),
+        brandName: brandName?.trim() || null,
+        isAd: !!isAd,
         description: description.trim(),
         fabric: fabric?.trim() || null,
         priceMinor,
         compareAtMinor: compareAtMinor || null,
+        promotionLabel: promotionLabel?.trim() || null,
         featured: !!featured,
         active: active ?? true,
         categoryId,

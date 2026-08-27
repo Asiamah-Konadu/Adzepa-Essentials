@@ -27,6 +27,7 @@ const spaceMono = Space_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.SITE_URL || "https://adzepaessentials.com"),
   title: "Adzepa Essentials — African Wax Print Bombers & Fabric",
   description:
     "Statement bomber jackets and premium wax print fabric, cut from authentic African prints. Order straight to WhatsApp.",
@@ -36,6 +37,7 @@ export const metadata: Metadata = {
       "Statement bomber jackets and premium wax print fabric, cut from authentic African prints.",
     type: "website",
   },
+  icons: { icon: "/images/logo.svg" },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

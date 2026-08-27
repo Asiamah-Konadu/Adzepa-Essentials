@@ -27,10 +27,13 @@ export default async function EditProductPage({
         categories={categories}
         initial={{
           name: product.name,
+          brandName: product.brandName ?? "",
+          isAd: product.isAd,
           description: product.description,
           fabric: product.fabric ?? "",
           price: (product.priceMinor / 100).toString(),
           compareAtPrice: product.compareAtMinor ? (product.compareAtMinor / 100).toString() : "",
+          promotionLabel: product.promotionLabel ?? "",
           categoryId: product.categoryId,
           featured: product.featured,
           active: product.active,
