@@ -24,8 +24,13 @@ export function buildWhatsAppOrderLink(
   details: CheckoutDetails,
   orderId?: string
 ): string {
-  const number = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "233000000000";
+  const configuredNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER?.replace(/\D/g, "");
+  if (!configuredNumber || configuredNumber.length < 8 || configuredNumber.length > 15) {
+    throw new Error("WhatsApp checkout is not configured. Set NEXT_PUBLIC_WHATSAPP_NUMBER.");
+  }
+
   const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || "https://adzepaessentials.com").replace(/\/$/, "");
+  const productUrl = (slug: string) => `${siteUrl}/product/${encodeURIComponent(slug)}`;
 
   const lines: string[] = [];
   lines.push("*ADZEPA ESSENTIALS*");
@@ -37,7 +42,7 @@ export function buildWhatsAppOrderLink(
     const variant = item.variantLabel ? ` (${item.variantLabel})` : "";
     const lineTotal = formatMoney(item.unitPriceMinor * item.quantity);
     lines.push(`${item.quantity} x *${item.productName}*${variant} — ${lineTotal}`);
-    lines.push(`${siteUrl}/product/${item.productSlug}`);
+    lines.push(productUrl(item.productSlug));
   }
   const total = items.reduce((sum, i) => sum + i.unitPriceMinor * i.quantity, 0);
   lines.push("");
@@ -52,5 +57,5 @@ export function buildWhatsAppOrderLink(
   lines.push("Please confirm availability and payment options. Thank you!");
 
   const message = encodeURIComponent(lines.join("\n"));
-  return `https://wa.me/${number}?text=${message}`;
+  return `https://wa.me/${configuredNumber}?text=${message}`;
 }
