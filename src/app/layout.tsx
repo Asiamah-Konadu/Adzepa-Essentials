@@ -35,12 +35,22 @@ export const metadata: Metadata = {
     title: "Adzepa Essentials",
     description:
       "Statement bomber jackets and premium wax print fabric, cut from authentic African prints.",
+    url: "/",
+    siteName: "Adzepa Essentials",
     type: "website",
-    images: [{ url: "/images/logo.svg", width: 512, height: 512, alt: "Adzepa Essentials" }],
+    images: [{
+      url: "/images/products/bomber-red-block-mannequin.webp",
+      width: 1122,
+      height: 1400,
+      alt: "Adzepa Essentials African wax print bomber jacket",
+    }],
   },
   twitter: {
     card: "summary_large_image",
-    images: ["/images/logo.svg"],
+    title: "Adzepa Essentials",
+    description:
+      "Statement bomber jackets and premium wax print fabric, cut from authentic African prints.",
+    images: ["/images/products/bomber-red-block-mannequin.webp"],
   },
   icons: { icon: "/images/logo.svg" },
 };

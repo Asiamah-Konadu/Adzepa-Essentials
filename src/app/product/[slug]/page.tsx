@@ -24,6 +24,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     openGraph: {
       title: product.name,
       description: product.description,
+      siteName: "Adzepa Essentials",
       type: "website",
       url: absoluteUrl,
       ...(absoluteImage ? { images: [{ url: absoluteImage, alt: product.name }] } : {}),
