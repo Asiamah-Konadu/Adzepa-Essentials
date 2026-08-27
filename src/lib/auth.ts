@@ -54,8 +54,11 @@ export async function createSessionCookieValue(email: string): Promise<string> {
 export async function isValidSessionValue(value: string | undefined): Promise<boolean> {
   if (!value) return false;
   const parts = value.split(".");
-  if (parts.length !== 3) return false;
-  const [email, expiresStr, signature] = parts;
+  if (parts.length < 3) return false;
+  const signature = parts.pop();
+  const expiresStr = parts.pop();
+  const email = parts.join(".");
+  if (!email || !expiresStr || !signature) return false;
   const payload = `${email}.${expiresStr}`;
   const expectedSignature = await sign(payload);
   if (signature !== expectedSignature) return false;
