@@ -85,7 +85,7 @@ export default function ProductForm({
         const formData = new FormData();
         formData.append("file", file);
         const res = await fetch("/api/admin/uploads", { method: "POST", body: formData });
-        const result = await res.json();
+        const result = await res.json().catch(() => ({}));
         if (!res.ok) throw new Error(result.error || "Could not upload image.");
 
         setValues((v) => {
