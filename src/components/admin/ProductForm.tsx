@@ -36,6 +36,7 @@ export default function ProductForm({
   const router = useRouter();
   const [values, setValues] = useState<ProductFormValues>(initial);
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const isEditing = !!productId;
@@ -72,6 +73,35 @@ export default function ProductForm({
 
   function removeImageUrl(index: number) {
     setValues((v) => ({ ...v, imageUrls: v.imageUrls.filter((_, i) => i !== index) }));
+  }
+
+  async function uploadImages(files: FileList | null) {
+    if (!files?.length) return;
+    setUploading(true);
+    setError(null);
+
+    try {
+      for (const file of Array.from(files)) {
+        const formData = new FormData();
+        formData.append("file", file);
+        const res = await fetch("/api/admin/uploads", { method: "POST", body: formData });
+        const result = await res.json();
+        if (!res.ok) throw new Error(result.error || "Could not upload image.");
+
+        setValues((v) => {
+          const emptyIndex = v.imageUrls.findIndex((url) => !url.trim());
+          if (emptyIndex === -1) return { ...v, imageUrls: [...v.imageUrls, result.url] };
+          return {
+            ...v,
+            imageUrls: v.imageUrls.map((url, index) => (index === emptyIndex ? result.url : url)),
+          };
+        });
+      }
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Could not upload image.");
+    } finally {
+      setUploading(false);
+    }
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -222,8 +252,23 @@ export default function ProductForm({
       {/* Images */}
       <div className="mb-5">
         <label className="block font-tag text-[11px] uppercase tracking-tag text-muted mb-2">
-          Image URLs (from /public/images/... or an external host)
+          Product images
         </label>
+        <label className="inline-flex cursor-pointer items-center border border-ink bg-ink px-3 py-2 text-xs font-tag uppercase tracking-tag text-paper hover:bg-signal">
+          {uploading ? "Uploading…" : "Upload images"}
+          <input
+            type="file"
+            accept="image/*"
+            multiple
+            disabled={uploading}
+            onChange={(e) => {
+              void uploadImages(e.target.files);
+              e.target.value = "";
+            }}
+            className="sr-only"
+          />
+        </label>
+        <p className="mt-2 text-xs text-muted">JPG, PNG, WEBP or GIF. Maximum 5 MB each.</p>
         <div className="space-y-2">
           {values.imageUrls.map((url, i) => (
             <div key={i} className="flex gap-2">
@@ -233,6 +278,9 @@ export default function ProductForm({
                 placeholder="/images/products/example.webp"
                 className="flex-1 border border-ink/20 px-3 py-2 text-sm focus:border-ink outline-none"
               />
+              {url && (
+                <img src={url} alt="" className="h-10 w-10 shrink-0 object-cover" />
+              )}
               <button
                 type="button"
                 onClick={() => removeImageUrl(i)}

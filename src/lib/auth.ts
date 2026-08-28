@@ -73,6 +73,13 @@ export async function getAdminSession(): Promise<boolean> {
   return isValidSessionValue(value);
 }
 
+export async function getAdminSessionEmail(): Promise<string | null> {
+  const store = await cookies();
+  const value = store.get(COOKIE_NAME)?.value;
+  if (!(await isValidSessionValue(value))) return null;
+  return value?.split(".").slice(0, -2).join(".") || null;
+}
+
 export const ADMIN_COOKIE_NAME = COOKIE_NAME;
 export const ADMIN_COOKIE_MAX_AGE = Math.floor(SESSION_LENGTH_MS / 1000);
 

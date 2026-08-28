@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useCart } from "@/lib/cart-context";
@@ -12,11 +12,13 @@ export default function CartPage() {
   const [form, setForm] = useState({
     customerName: "",
     customerPhone: "",
+    customerEmail: "",
     deliveryAddress: "",
     notes: "",
   });
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const checkoutKey = useRef(crypto.randomUUID());
 
   const canCheckout =
     lines.length > 0 &&
@@ -34,13 +36,11 @@ export default function CartPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...form,
+          idempotencyKey: checkoutKey.current,
           items: lines.map((l) => ({
             productId: l.productId,
             variantId: l.variantId,
-            productName: l.productName,
-            variantLabel: l.variantLabel,
             quantity: l.quantity,
-            unitPriceMinor: l.unitPriceMinor,
           })),
         }),
       });
@@ -50,21 +50,23 @@ export default function CartPage() {
         throw new Error(body.error || "Could not save your order. Please try again.");
       }
 
-      const { orderId } = await res.json();
+      const order = await res.json();
 
       const link = buildWhatsAppOrderLink(
-        lines.map((l) => ({
-          productName: l.productName,
-          productSlug: l.productSlug,
-          variantLabel: l.variantLabel,
-          quantity: l.quantity,
-          unitPriceMinor: l.unitPriceMinor,
+        order.items.map((item: { productId: string; productName: string; variantLabel?: string | null; quantity: number; unitPriceMinor: number }) => ({
+          productName: item.productName,
+          productSlug: lines.find((line) => line.productId === item.productId)?.productSlug || "shop",
+          variantLabel: item.variantLabel,
+          quantity: item.quantity,
+          unitPriceMinor: item.unitPriceMinor,
         })),
         form,
-        orderId
+        order.orderNumber,
+        order.totalMinor
       );
 
       clear();
+      checkoutKey.current = crypto.randomUUID();
       window.location.href = link;
     } catch (e) {
       setError(e instanceof Error ? e.message : "Something went wrong.");
@@ -168,6 +170,12 @@ export default function CartPage() {
                 onChange={(v) => setForm((f) => ({ ...f, customerPhone: v }))}
                 type="tel"
                 required
+              />
+              <Field
+                label="Email (optional)"
+                value={form.customerEmail}
+                onChange={(v) => setForm((f) => ({ ...f, customerEmail: v }))}
+                type="email"
               />
               <Field
                 label="Delivery address"

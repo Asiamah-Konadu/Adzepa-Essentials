@@ -17,7 +17,7 @@ full admin panel and WhatsApp checkout instead of a payment gateway.
   stock check) before the customer is handed off to WhatsApp, so you have a
   permanent record even though payment is confirmed over chat.
 - **Admin panel** at `/admin`: dashboard, order list with status updates,
-  full product CRUD (images, price, sizes/stock, featured/visible toggles),
+  full product CRUD (image uploads, price, sizes/stock, featured/visible toggles),
   and category management. Protected by a signed-cookie login.
 - **SEO basics**: sitemap.xml, robots.txt, per-page metadata.
 
@@ -84,9 +84,10 @@ for `cacheStrategy` and the serverless driver.
    `DATABASE_URL`. (Prisma Postgres is also listed in the Vercel Marketplace
    under the Storage tab, which wires up `DATABASE_URL` automatically if you
    prefer to provision it from inside Vercel instead of the Prisma CLI.)
-4. Deploy. Run `npx prisma db push` once against your production
-   `DATABASE_URL` (locally, pointed at prod) before the first deploy, or use
-   Vercel's build step — either works.
+4. Deploy. For an existing database, apply the additive order-receipt
+  migration with `npx prisma migrate deploy` against your production
+  `DATABASE_URL`. For a new database, `npx prisma db push` is still suitable
+  before the first deploy.
 
 I can also provision the Prisma Postgres database and deploy this to Vercel
 directly for you — just say the word and confirm which accounts to use.
@@ -122,10 +123,8 @@ prisma/
   user table with hashed passwords — fine for one or two admins, but
   upgrade this (the `AdminUser` model is already in the schema, just not
   wired up) before handing access to a larger team.
-- **Image uploads**: the admin panel takes image *URLs*, not file uploads.
-  New product photos need to be added to `/public/images/` and redeployed,
-  or hosted externally (e.g. a Vercel Blob store) and linked by URL. I can
-  wire up direct image upload if you want that next.
+- **Image uploads**: product images are uploaded to Vercel Blob from the admin
+  panel. Set `BLOB_READ_WRITE_TOKEN` in your environment before uploading.
 - **Payment** happens entirely over WhatsApp, as requested — there's no
-  payment gateway integration. Order status (Pending/Confirmed/Fulfilled)
-  is tracked manually from the admin Orders page.
+  payment gateway integration. Payment status is tracked manually from the
+  admin Orders page, and receipts are available only to authenticated admins.

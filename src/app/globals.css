@@ -67,3 +67,22 @@ textarea:focus-visible {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+@media print {
+  .site-chrome,
+  .receipt-actions,
+  .print-trigger {
+    display: none !important;
+  }
+
+  body {
+    background: white;
+  }
+
+  .receipt-shell,
+  .receipt-paper {
+    max-width: none;
+    border: 0;
+    padding: 0;
+  }
+}

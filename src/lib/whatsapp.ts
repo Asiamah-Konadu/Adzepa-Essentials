@@ -22,7 +22,8 @@ export type CheckoutDetails = {
 export function buildWhatsAppOrderLink(
   items: CheckoutItem[],
   details: CheckoutDetails,
-  orderId?: string
+  orderNumber?: string,
+  totalMinor?: number
 ): string {
   const configuredNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER?.replace(/\D/g, "");
   if (!configuredNumber || configuredNumber.length < 8 || configuredNumber.length > 15) {
@@ -35,7 +36,7 @@ export function buildWhatsAppOrderLink(
   lines.push("*ADZEPA ESSENTIALS*");
   lines.push("_New order request_");
   lines.push("");
-  if (orderId) lines.push(`*Order ref:* ${orderId}`);
+  if (orderNumber) lines.push(`*Order ref:* ${orderNumber}`);
   lines.push("*ITEMS*");
   for (const item of items) {
     const variant = item.variantLabel ? ` (${item.variantLabel})` : "";
@@ -43,7 +44,7 @@ export function buildWhatsAppOrderLink(
     lines.push(`${item.quantity} x *${item.productName}*${variant} — ${lineTotal}`);
     lines.push(new URL(`/product/${item.productSlug}`, siteUrl).toString());
   }
-  const total = items.reduce((sum, i) => sum + i.unitPriceMinor * i.quantity, 0);
+  const total = totalMinor ?? items.reduce((sum, i) => sum + i.unitPriceMinor * i.quantity, 0);
   lines.push("");
   lines.push(`*TOTAL: ${formatMoney(total)}*`);
   lines.push("");

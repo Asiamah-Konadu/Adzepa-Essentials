@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="mt-24 border-t border-ink/10 bg-ink text-paper">
+    <footer className="site-chrome mt-24 border-t border-ink/10 bg-ink text-paper">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 py-14 grid grid-cols-2 md:grid-cols-4 gap-8">
         <div className="col-span-2">
           <div className="font-display font-black text-xl uppercase mb-3">

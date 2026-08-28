@@ -17,7 +17,7 @@ export default function Header() {
   const { totalItems } = useCart();
 
   return (
-    <header className="sticky top-0 z-40 bg-paper/95 backdrop-blur border-b border-ink/10">
+    <header className="site-chrome sticky top-0 z-40 bg-paper/95 backdrop-blur border-b border-ink/10">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <div className="flex h-16 items-center justify-between">
           <Link href="/" className="flex items-center gap-2 shrink-0" aria-label="Adzepa Essentials home">

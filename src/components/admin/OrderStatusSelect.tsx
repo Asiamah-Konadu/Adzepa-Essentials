@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-const STATUSES = ["PENDING", "CONFIRMED", "FULFILLED", "CANCELLED"] as const;
+const STATUSES = ["PENDING", "PROCESSING", "COMPLETED", "CANCELLED"] as const;
 
 export default function OrderStatusSelect({
   orderId,
